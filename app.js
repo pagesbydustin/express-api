@@ -1,23 +1,24 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
+const { sequelize } = require("./models");
+const gameRoutes = require("./routes/gameRoutes");
 
 // Middleware for parsing JSON
 app.use(express.json());
 
-// Basic route
+// Use game routes
+app.use("/games", gameRoutes);
+
+// Test route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to the Express API!" });
+  res.json({ message: "Welcome to the Game API!" });
 });
 
-// Example of a POST route
-app.post("/data", (req, res) => {
-  const data = req.body;
-  res.json({ receivedData: data });
-});
-
-// Environment variable port, default to 3000 if not defined
+// Synchronize models with database and start server
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+sequelize.sync().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
