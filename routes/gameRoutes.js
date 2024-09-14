@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const { Game } = require("../models");
+const authenticateJWT = require("../middleware/auth"); // Import JWT authentication middleware
 
-// Create a new game
-router.post("/", async (req, res) => {
+// Create a new game (protected)
+router.post("/", authenticateJWT, async (req, res) => {
   try {
     const newGame = await Game.create(req.body);
     res.status(201).json(newGame);
@@ -12,7 +13,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all games
+// Get all games (public)
 router.get("/", async (req, res) => {
   try {
     const games = await Game.findAll();
@@ -22,19 +23,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a single game by ID
-router.get("/:id", async (req, res) => {
-  try {
-    const game = await Game.findByPk(req.params.id);
-    if (!game) return res.status(404).json({ message: "Game not found" });
-    res.json(game);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Update a game by ID
-router.put("/:id", async (req, res) => {
+// Update a game by ID (protected)
+router.put("/:id", authenticateJWT, async (req, res) => {
   try {
     const updatedGame = await Game.update(req.body, {
       where: { id: req.params.id },
@@ -48,8 +38,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a game by ID
-router.delete("/:id", async (req, res) => {
+// Delete a game by ID (protected)
+router.delete("/:id", authenticateJWT, async (req, res) => {
   try {
     const rowsDeleted = await Game.destroy({ where: { id: req.params.id } });
     if (rowsDeleted === 0)
