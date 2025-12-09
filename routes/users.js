@@ -1,10 +1,11 @@
+// ===================================
 // routes/users.js
+// ===================================
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
-// GET all users (admin only)
 router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
@@ -17,7 +18,6 @@ router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-// GET current user profile
 router.get('/me', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
@@ -36,7 +36,6 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
-// GET user's journal entries count
 router.get('/me/stats', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
@@ -57,7 +56,6 @@ router.get('/me/stats', authenticateToken, async (req, res) => {
   }
 });
 
-// GET single user by ID (admin only)
 router.get('/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -77,7 +75,6 @@ router.get('/:id', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-// UPDATE user role (admin only)
 router.put('/:id/role', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
@@ -103,12 +100,10 @@ router.put('/:id/role', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-// DELETE user (admin only)
 router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Prevent admin from deleting themselves
     if (parseInt(id) === req.user.id) {
       return res.status(400).json({ success: false, error: 'Cannot delete your own account' });
     }

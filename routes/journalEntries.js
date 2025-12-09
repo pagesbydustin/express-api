@@ -1,10 +1,12 @@
+
+// ===================================
 // routes/journalEntries.js
+// ===================================
 const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
-// GET all journal entries for current user
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
@@ -22,7 +24,6 @@ router.get('/', authenticateToken, async (req, res) => {
   }
 });
 
-// GET all journal entries (admin only)
 router.get('/all', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
@@ -38,7 +39,6 @@ router.get('/all', authenticateToken, requireAdmin, async (req, res) => {
   }
 });
 
-// GET single journal entry by ID
 router.get('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -56,7 +56,6 @@ router.get('/:id', authenticateToken, async (req, res) => {
 
     const entry = result.rows[0];
 
-    // Check if user owns this entry or is admin
     if (entry.user_id !== req.user.id && req.user.role !== 'admin') {
       return res.status(403).json({ success: false, error: 'Access denied' });
     }
@@ -68,7 +67,6 @@ router.get('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// POST create new journal entry
 router.post('/', authenticateToken, async (req, res) => {
   try {
     const { title, content, mood, tags } = req.body;
@@ -91,13 +89,11 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// PUT update journal entry
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, content, mood, tags } = req.body;
     
-    // Check ownership
     const checkOwnership = await pool.query(
       'SELECT user_id FROM journal_entries WHERE id = $1',
       [id]
@@ -130,12 +126,10 @@ router.put('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// DELETE journal entry
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     
-    // Check ownership
     const checkOwnership = await pool.query(
       'SELECT user_id FROM journal_entries WHERE id = $1',
       [id]
@@ -162,3 +156,4 @@ router.delete('/:id', authenticateToken, async (req, res) => {
 });
 
 module.exports = router;
+

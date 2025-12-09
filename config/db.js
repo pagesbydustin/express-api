@@ -1,4 +1,8 @@
+// ===================================
 // config/db.js
+// ===================================
+
+
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -8,7 +12,6 @@ const pool = new Pool({
   }
 });
 
-// Test connection
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('Database connection error:', err);
