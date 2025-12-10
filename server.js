@@ -17,15 +17,18 @@
 // ===================================
 // server.js
 // ===================================
-
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const journalEntriesRouter = require('./routes/journalEntries');
 const usersRouter = require('./routes/users');
 const authRouter = require('./routes/auth');
+
+// Enable CORS for all routes
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -224,6 +227,9 @@ app.get('/', (req, res) => {
       </div>
 
       <script>
+        // Set your API base URL here
+        const API_BASE_URL = window.location.origin; // Uses current domain/port
+        
         function showTab(tab) {
           const tabs = document.querySelectorAll('.tab');
           tabs.forEach(t => t.classList.remove('active'));
@@ -253,7 +259,7 @@ app.get('/', (req, res) => {
           const password = document.getElementById('loginPassword').value;
 
           try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch(API_BASE_URL + '/api/auth/login', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ email, password })
@@ -269,6 +275,7 @@ app.get('/', (req, res) => {
               showMessage(data.error || 'Login failed', 'error');
             }
           } catch (error) {
+            console.error('Login error:', error);
             showMessage('Connection error. Please try again.', 'error');
           }
         }
@@ -280,7 +287,7 @@ app.get('/', (req, res) => {
           const password = document.getElementById('registerPassword').value;
 
           try {
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch(API_BASE_URL + '/api/auth/register', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ username, email, password })
@@ -295,6 +302,7 @@ app.get('/', (req, res) => {
               showMessage(data.error || 'Registration failed', 'error');
             }
           } catch (error) {
+            console.error('Register error:', error);
             showMessage('Connection error. Please try again.', 'error');
           }
         }
