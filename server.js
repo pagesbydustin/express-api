@@ -40,6 +40,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname, 'public', 'index.html');
 });
 
+app.get('/docs', (req, res) => {
+  res.sendFile(__dirname, 'public', 'docs.html');
+});
+
 app.use('/api/journal-entries', journalEntriesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
