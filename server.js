@@ -37,11 +37,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname, 'public', 'index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.get('/docs', (req, res) => {
-  res.sendFile(__dirname, 'public', 'docs.html');
+  res.sendFile(path.join(__dirname, 'public', 'docs.html'));
 });
 
 app.use('/api/journal-entries', journalEntriesRouter);
