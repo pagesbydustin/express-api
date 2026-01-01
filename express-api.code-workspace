@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../react/Gratitde-Garden-v1"
+		}
+	],
+	"settings": {
+			"files.autoSave": "onFocusChange"
+	}
+}
