@@ -1,18 +1,3 @@
-// ===================================
-// FILE STRUCTURE:
-// project/
-// ├── server.js
-// ├── package.json
-// ├── .env
-// ├── config/
-// │   └── db.js
-// ├── middleware/
-// │   └── auth.js
-// └── routes/
-//     ├── auth.js
-//     ├── users.js
-//     └── journalEntries.js
-// ===================================
 
 // ===================================
 // server.js
